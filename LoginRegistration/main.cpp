@@ -93,7 +93,8 @@ public:
 	}
 };
 
-void validatePassword(const std::string& value, const PasswordConstraint& constraint) {
+bool validatePassword(std::string& value, PasswordConstraint& constraint) {
+
 	if (!constraint.isLengthValid(value)) {
 		std::cout << "Error: Password should have a minimum length of " << constraint.getMinLength()
 			<< " and a maximum length of " << constraint.getMaxLength() << std::endl;
@@ -114,25 +115,13 @@ void validatePassword(const std::string& value, const PasswordConstraint& constr
 	if (constraint.isRequireSpecialChars() && !constraint.hasSpecialChars(value)) {
 		std::cout << "Error: Password should contain at least one special character" << std::endl;
 	}
+	return 0;
 }
 
 int main() {
 
 	mainmenu();
 
-	std::string password;
-	std::cout << "Enter a password: ";
-	std::cin >> password;
-
-	PasswordConstraint constraint;
-	constraint.setMinLength(8);
-	constraint.setMaxLength(20);
-	constraint.setRequireLowercase(true);
-	constraint.setRequireUppercase(true);
-	constraint.setRequireNumbers(true);
-	constraint.setRequireSpecialChars(true);
-
-	validatePassword(password, constraint);
 
 	return 0;
 }
@@ -197,41 +186,49 @@ void reattemptLogin() {
 
 void registration() {
 
-	system("cls");
+	
 	bool valid = false;
 	int minLength = 8;
 	int maxLength = 20;
+
+
 
 	string regUsername, regPassword, regUser, regPass;
 
 	std::cout << "Welcome to the registration page!" << '\n';
 	std::cout << "Please enter a username: " << '\n';
 	std::cin >> regUsername;
-	std::cout << "Enter a password that is 8-20 characters long, with an uppercase and lowercase \n";
+	std::cout << "Enter a password that is 8-20 characters long\n";
 	std::cin >> regPassword;
 
-	testPassword(regPassword);
+	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
+		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
+		registerUser << regUsername << " " << regPassword << std::endl;
 
-	std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
-	registerUser << regUsername << " " << regPassword << std::endl;
 
-
-	system("cls");
-	int choice;
-	std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << '\n' << std::endl;
-	std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
-	std::cin >> choice;
-	switch (choice)
-	{
-	case 1: login();
-		break;
-	case 2: mainmenu();
-		break;
-	default:
-		std::cout << "Invalid input, returning to main menu." << std::endl;
-		mainmenu();
-		break;
+		system("cls");
+		int choice;
+		std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << '\n' << std::endl;
+		std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
+		std::cin >> choice;
+		switch (choice)
+		{
+		case 1: login();
+			break;
+		case 2: mainmenu();
+			break;
+		default:
+			std::cout << "Invalid input, returning to main menu." << std::endl;
+			mainmenu();
+			break;
+		}
 	}
+	else {
+		std::cout << "Invalid password, please try again" << std::endl;
+		registration();
+
+	}
+	
 }
 	
 
@@ -274,22 +271,31 @@ void mainmenu() {
 	return;
 }
 
-void testPassword(string password) {
 
-	
-	std::cout << "Enter a password: ";
+
+
+
+
+/* void testPassword(string password) {
+
+	bool valid = false;
+
+
 	std::cin >> password;
 
-	PasswordConstraint constraint;
-	constraint.setMinLength(8);
-	constraint.setMaxLength(20);
-	constraint.setRequireLowercase(true);
-	constraint.setRequireUppercase(true);
-	constraint.setRequireNumbers(true);
-	constraint.setRequireSpecialChars(true);
+		PasswordConstraint constraint;
+		constraint.setMinLength(8);
+		constraint.setMaxLength(20);
+		constraint.setRequireLowercase(true);
+		constraint.setRequireUppercase(true);
+		constraint.setRequireNumbers(true);
+		constraint.setRequireSpecialChars(true);
 
-	validatePassword(password, constraint);
+		validatePassword(password, constraint);
 
+		valid = true;
+	
+		
 	
 }
 
