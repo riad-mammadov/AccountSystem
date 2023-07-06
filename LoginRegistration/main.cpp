@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ostream>
 #include <fstream>
+#include <iomanip>
 
 
 void login();
@@ -15,15 +16,14 @@ int main() {
 	int choice; // Menu choice
 
 	// Formatting the login page
-
-	std::cout << "\t\t\t_______________________________" << '\n';
-	std::cout << "\t\t\t          Login Page\n\n";
-	std::cout << "\t\t\t_________  Main Menu  _________" << '\n';
-	std::cout << "                  \n\n";
-	std::cout << "\t\t\t* Select 1 for Login                 \n\n";
-	std::cout << "\t\t\t* Select 2 to Register              \n\n";
-	std::cout << "\t\t\t* Select 3 if you Forgot Password                \n\n";
-	std::cout << "\t\t\t* Select 4 to Exit Menu.                 \n\n";
+	std::cout << "\t\t\t_______________________________________" << '\n';
+	std::cout << "\t\t\t					          " << '\n';
+	std::cout << "\t\t\t_____________  Main Menu  _____________" << '\n';
+	std::cout << "                  \n";
+	std::cout << "\t\t\t|* Select 1 for Login               \t|\n";
+	std::cout << "\t\t\t|* Select 2 to Register             \t|\n";
+	std::cout << "\t\t\t|* Select 3 if you Forgot Password  \t|\n";
+	std::cout << "\t\t\t|* Select 4 to Exit Menu.           \t| \n";
 
 	std::cin >> choice;
 
@@ -44,6 +44,7 @@ int main() {
 	default: // If invalid option, recall main() and try again.
 		system("cls");
 		std::cout << "Invalid option, please try again";
+		std::cout << '\n';
 		main();
 		break;
 	}
@@ -57,10 +58,10 @@ void login() {
 
 	string username, password, userID,passID;
 
-	std::cout << "/t/t/t Please enter your username: " << std::endl;
+	std::cout << "\t\t\t Please enter your username: " << std::endl;
 	std::cin >> username;
 
-	std::cout << "/t/t/t Now enter your password: " << std::endl;
+	std::cout << "\t\t\t Now enter your password: " << std::endl;
 	std::cin >> password;
 
 	std::ifstream record("records.txt"); // file which stores the user details
@@ -68,7 +69,7 @@ void login() {
 		
 		// checking the user input against the record details
 		if (userID == username && passID == password) {
-			successLogin == true; 
+			successLogin = true; 
 			system("cls");
 		}
 	}
@@ -80,24 +81,42 @@ void login() {
 		main();
 	}
 	else {
-		// give the user the choice of whether they want to attempt login again or return to main menu.
+		// call function to reattempt login
 		reattemptLogin();
 	}
 }
 
 void reattemptLogin() {
 
+	// give the user the choice of whether they want to attempt login again or return to main menu.
 	string reattempt;
-	system("cls");
 	std::cout << "Unsuccessful login, would you like to try again? (yes/no)" << std::endl;
 	std::cin >> reattempt;
-	if (reattempt == "Yes" && reattempt == "yes")
+	if (reattempt == "Yes" || reattempt == "yes")
 		login();
-	else if (reattempt == "no" && reattempt == "No")
+	else if (reattempt == "no" || reattempt == "No") {
+		system("cls");
 		main();
-	else
+	}
+	else {
+		system("cls");
 		std::cout << "Please enter yes or no." << std::endl;
-	reattemptLogin();
+		reattemptLogin();
+	}
+	
+
+}
+
+void registration() {
+
+	system("cls");
+	string regUsername, regPassword, regUser, regPass;
+	std::cout << "Welcome to the registration page!" << '\n';
+	std::cout << "Please enter a username: " << '\n';
+	std::cin >> regUsername;
+	std::cout << "Enter a password that is atleast 8 characters long, with an uppercase, \n";
+	std::cout << " lowercase and special character";
+	std::cin >> regPassword;
 	
 
 }
