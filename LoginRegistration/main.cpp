@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
-#include <regex>
+// #include <regex>
 
 using std::string;
 
@@ -12,111 +12,9 @@ void forgot_password();
 void registration();
 void reattemptLogin();
 void mainmenu();
-void testPassword(string password);
+// void testPassword(string password);
 
-class PasswordConstraint {
-private:
-	int minLength = 8;  // Default value for minLength
-	int maxLength = 20; // Default value for maxLength
-	bool requireLowercase = false; // Default value for requireLowercase
-	bool requireUppercase = false; // Default value for requireUppercase
-	bool requireNumbers = false;   // Default value for requireNumbers
-	bool requireSpecialChars = false; // Default value for requireSpecialChars
 
-public:
-	int getMinLength() const {
-		return minLength;
-	}
-
-	void setMinLength(int length) {
-		minLength = length;
-	}
-
-	int getMaxLength() const {
-		return maxLength;
-	}
-
-	void setMaxLength(int length) {
-		maxLength = length;
-	}
-
-	bool isRequireLowercase() const {
-		return requireLowercase;
-	}
-
-	void setRequireLowercase(bool value) {
-		requireLowercase = value;
-	}
-
-	bool isRequireUppercase() const {
-		return requireUppercase;
-	}
-
-	void setRequireUppercase(bool value) {
-		requireUppercase = value;
-	}
-
-	bool isRequireNumbers() const {
-		return requireNumbers;
-	}
-
-	void setRequireNumbers(bool value) {
-		requireNumbers = value;
-	}
-
-	bool isRequireSpecialChars() const {
-		return requireSpecialChars;
-	}
-
-	void setRequireSpecialChars(bool value) {
-		requireSpecialChars = value;
-	}
-
-	bool isLengthValid(const std::string& value) const {
-		return value.length() >= minLength && value.length() <= maxLength;
-	}
-
-	bool hasLowercase(const std::string& value) const {
-		return std::regex_search(value, std::regex("[a-z]"));
-	}
-
-	bool hasUppercase(const std::string& value) const {
-		return std::regex_search(value, std::regex("[A-Z]"));
-	}
-
-	bool hasNumbers(const std::string& value) const {
-		return std::regex_search(value, std::regex("[0-9]"));
-	}
-
-	bool hasSpecialChars(const std::string& value) const {
-		return std::regex_search(value, std::regex("[!@#%^&*(),.?\":{}|<>]"));
-	}
-};
-
-bool validatePassword(std::string& value, PasswordConstraint& constraint) {
-
-	if (!constraint.isLengthValid(value)) {
-		std::cout << "Error: Password should have a minimum length of " << constraint.getMinLength()
-			<< " and a maximum length of " << constraint.getMaxLength() << std::endl;
-	}
-
-	if (constraint.isRequireLowercase() && !constraint.hasLowercase(value)) {
-		std::cout << "Error: Password should contain at least one lowercase letter" << std::endl;
-	}
-
-	if (constraint.isRequireUppercase() && !constraint.hasUppercase(value)) {
-		std::cout << "Error: Password should contain at least one uppercase letter" << std::endl;
-	}
-
-	if (constraint.isRequireNumbers() && !constraint.hasNumbers(value)) {
-		std::cout << "Error: Password should contain at least one number" << std::endl;
-	}
-
-	if (constraint.isRequireSpecialChars() && !constraint.hasSpecialChars(value)) {
-		std::cout << "Error: Password should contain at least one special character" << std::endl;
-	}
-	return 0;
-}
 
 int main() {
 
@@ -201,7 +99,7 @@ void registration() {
 	std::cout << "Enter a password that is 8-20 characters long\n";
 	std::cin >> regPassword;
 
-	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
+	if (regPassword.length() >= 8 && regPassword.length() <= 20)  { // checks if password is 8-20 characters long and only then will it write into the file.
 		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
 		registerUser << regUsername << " " << regPassword << std::endl;
 
@@ -322,4 +220,110 @@ void mainmenu() {
 	}
 
 	
-} */
+}
+
+class PasswordConstraint {
+private:
+	int minLength = 8;  // Default value for minLength
+	int maxLength = 20; // Default value for maxLength
+	bool requireLowercase = false; // Default value for requireLowercase
+	bool requireUppercase = false; // Default value for requireUppercase
+	bool requireNumbers = false;   // Default value for requireNumbers
+	bool requireSpecialChars = false; // Default value for requireSpecialChars
+
+public:
+	int getMinLength() const {
+		return minLength;
+	}
+
+	void setMinLength(int length) {
+		minLength = length;
+	}
+
+	int getMaxLength() const {
+		return maxLength;
+	}
+
+	void setMaxLength(int length) {
+		maxLength = length;
+	}
+
+	bool isRequireLowercase() const {
+		return requireLowercase;
+	}
+
+	void setRequireLowercase(bool value) {
+		requireLowercase = value;
+	}
+
+	bool isRequireUppercase() const {
+		return requireUppercase;
+	}
+
+	void setRequireUppercase(bool value) {
+		requireUppercase = value;
+	}
+
+	bool isRequireNumbers() const {
+		return requireNumbers;
+	}
+
+	void setRequireNumbers(bool value) {
+		requireNumbers = value;
+	}
+
+	bool isRequireSpecialChars() const {
+		return requireSpecialChars;
+	}
+
+	void setRequireSpecialChars(bool value) {
+		requireSpecialChars = value;
+	}
+
+	bool isLengthValid(const std::string& value) const {
+		return value.length() >= minLength && value.length() <= maxLength;
+	}
+
+	bool hasLowercase(const std::string& value) const {
+		return std::regex_search(value, std::regex("[a-z]"));
+	}
+
+	bool hasUppercase(const std::string& value) const {
+		return std::regex_search(value, std::regex("[A-Z]"));
+	}
+
+	bool hasNumbers(const std::string& value) const {
+		return std::regex_search(value, std::regex("[0-9]"));
+	}
+
+	bool hasSpecialChars(const std::string& value) const {
+		return std::regex_search(value, std::regex("[!@#%^&*(),.?\":{}|<>]"));
+	}
+};
+
+bool validatePassword(std::string& value, PasswordConstraint& constraint) {
+
+	if (!constraint.isLengthValid(value)) {
+		std::cout << "Error: Password should have a minimum length of " << constraint.getMinLength()
+			<< " and a maximum length of " << constraint.getMaxLength() << std::endl;
+	}
+
+	if (constraint.isRequireLowercase() && !constraint.hasLowercase(value)) {
+		std::cout << "Error: Password should contain at least one lowercase letter" << std::endl;
+	}
+
+	if (constraint.isRequireUppercase() && !constraint.hasUppercase(value)) {
+		std::cout << "Error: Password should contain at least one uppercase letter" << std::endl;
+	}
+
+	if (constraint.isRequireNumbers() && !constraint.hasNumbers(value)) {
+		std::cout << "Error: Password should contain at least one number" << std::endl;
+	}
+
+	if (constraint.isRequireSpecialChars() && !constraint.hasSpecialChars(value)) {
+		std::cout << "Error: Password should contain at least one special character" << std::endl;
+	}
+	return 0;
+}
+
+*/
