@@ -3,23 +3,141 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <regex>
 
+using std::string;
 
 void login();
 void forgot_password();
 void registration();
 void reattemptLogin();
 void mainmenu();
-// bool tessPass();
+void testPassword(string password);
 
+class PasswordConstraint {
+private:
+	int minLength = 8;  // Default value for minLength
+	int maxLength = 20; // Default value for maxLength
+	bool requireLowercase = false; // Default value for requireLowercase
+	bool requireUppercase = false; // Default value for requireUppercase
+	bool requireNumbers = false;   // Default value for requireNumbers
+	bool requireSpecialChars = false; // Default value for requireSpecialChars
 
-using std::string;
+public:
+	int getMinLength() const {
+		return minLength;
+	}
+
+	void setMinLength(int length) {
+		minLength = length;
+	}
+
+	int getMaxLength() const {
+		return maxLength;
+	}
+
+	void setMaxLength(int length) {
+		maxLength = length;
+	}
+
+	bool isRequireLowercase() const {
+		return requireLowercase;
+	}
+
+	void setRequireLowercase(bool value) {
+		requireLowercase = value;
+	}
+
+	bool isRequireUppercase() const {
+		return requireUppercase;
+	}
+
+	void setRequireUppercase(bool value) {
+		requireUppercase = value;
+	}
+
+	bool isRequireNumbers() const {
+		return requireNumbers;
+	}
+
+	void setRequireNumbers(bool value) {
+		requireNumbers = value;
+	}
+
+	bool isRequireSpecialChars() const {
+		return requireSpecialChars;
+	}
+
+	void setRequireSpecialChars(bool value) {
+		requireSpecialChars = value;
+	}
+
+	bool isLengthValid(const std::string& value) const {
+		return value.length() >= minLength && value.length() <= maxLength;
+	}
+
+	bool hasLowercase(const std::string& value) const {
+		return std::regex_search(value, std::regex("[a-z]"));
+	}
+
+	bool hasUppercase(const std::string& value) const {
+		return std::regex_search(value, std::regex("[A-Z]"));
+	}
+
+	bool hasNumbers(const std::string& value) const {
+		return std::regex_search(value, std::regex("[0-9]"));
+	}
+
+	bool hasSpecialChars(const std::string& value) const {
+		return std::regex_search(value, std::regex("[!@#%^&*(),.?\":{}|<>]"));
+	}
+};
+
+void validatePassword(const std::string& value, const PasswordConstraint& constraint) {
+	if (!constraint.isLengthValid(value)) {
+		std::cout << "Error: Password should have a minimum length of " << constraint.getMinLength()
+			<< " and a maximum length of " << constraint.getMaxLength() << std::endl;
+	}
+
+	if (constraint.isRequireLowercase() && !constraint.hasLowercase(value)) {
+		std::cout << "Error: Password should contain at least one lowercase letter" << std::endl;
+	}
+
+	if (constraint.isRequireUppercase() && !constraint.hasUppercase(value)) {
+		std::cout << "Error: Password should contain at least one uppercase letter" << std::endl;
+	}
+
+	if (constraint.isRequireNumbers() && !constraint.hasNumbers(value)) {
+		std::cout << "Error: Password should contain at least one number" << std::endl;
+	}
+
+	if (constraint.isRequireSpecialChars() && !constraint.hasSpecialChars(value)) {
+		std::cout << "Error: Password should contain at least one special character" << std::endl;
+	}
+}
 
 int main() {
 
 	mainmenu();
-	
+
+	std::string password;
+	std::cout << "Enter a password: ";
+	std::cin >> password;
+
+	PasswordConstraint constraint;
+	constraint.setMinLength(8);
+	constraint.setMaxLength(20);
+	constraint.setRequireLowercase(true);
+	constraint.setRequireUppercase(true);
+	constraint.setRequireNumbers(true);
+	constraint.setRequireSpecialChars(true);
+
+	validatePassword(password, constraint);
+
+	return 0;
 }
+
+
 
 void login() {
 
@@ -92,48 +210,31 @@ void registration() {
 	std::cout << "Enter a password that is 8-20 characters long, with an uppercase and lowercase \n";
 	std::cin >> regPassword;
 
+	testPassword(regPassword);
 
-	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
-
-		for (int k = 0; k < regPassword.length(); k++)
-		{
-			if (isupper(regPassword[k]))
-			{
-				valid = true;
-			 
-			
-			}
-
-		}
-	}
-
-	if (valid = true) {
-		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
-		registerUser << regUsername << " " << regPassword << std::endl;
+	std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
+	registerUser << regUsername << " " << regPassword << std::endl;
 
 
-		system("cls");
-		int choice;
-		std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << std::endl;
-		std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
-		std::cin >> choice;
-		switch (choice)
-		{
-		case 1: login();
-			break;
-		case 2: mainmenu();
-			break;
-		default:
-			std::cout << "Invalid input, returning to main menu." << std::endl;
-			main();
-			break;
-		}
-	}
-	else if (valid = false) {
-		std::cout << "Invalid password, please attempt to create an account again." << '\n';
-		registration();
+	system("cls");
+	int choice;
+	std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << '\n' << std::endl;
+	std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
+	std::cin >> choice;
+	switch (choice)
+	{
+	case 1: login();
+		break;
+	case 2: mainmenu();
+		break;
+	default:
+		std::cout << "Invalid input, returning to main menu." << std::endl;
+		mainmenu();
+		break;
 	}
 }
+	
+
 
 void mainmenu() {
 	int choice; // Menu choice
@@ -171,6 +272,25 @@ void mainmenu() {
 		break;
 	}
 	return;
+}
+
+void testPassword(string password) {
+
+	
+	std::cout << "Enter a password: ";
+	std::cin >> password;
+
+	PasswordConstraint constraint;
+	constraint.setMinLength(8);
+	constraint.setMaxLength(20);
+	constraint.setRequireLowercase(true);
+	constraint.setRequireUppercase(true);
+	constraint.setRequireNumbers(true);
+	constraint.setRequireSpecialChars(true);
+
+	validatePassword(password, constraint);
+
+	
 }
 
 /* bool testPass(string password) {
