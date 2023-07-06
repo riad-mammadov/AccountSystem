@@ -9,9 +9,8 @@ void login();
 void forgot_password();
 void registration();
 void reattemptLogin();
-bool tessPass();
+// bool tessPass();
 
-bool valid;
 
 using std::string;
 
@@ -113,7 +112,7 @@ void reattemptLogin() {
 void registration() {
 
 	system("cls");
-	valid = false;
+	bool valid = false;
 	int minLength = 8;
 	int maxLength = 20;
 
@@ -126,7 +125,7 @@ void registration() {
 	std::cin >> regPassword;
 
 
-	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
+	if (regPassword.length() >= 8 || regPassword.length() <= 20) {
 
 		for (int k = 0; k < regPassword.length(); k++)
 		{
@@ -167,7 +166,7 @@ void registration() {
 	}
 }
 
-bool testPass(string password) {
+/* bool testPass(string password) {
 
 	valid = false;
 	
@@ -190,4 +189,4 @@ bool testPass(string password) {
 	}
 
 	
-}
+} */
