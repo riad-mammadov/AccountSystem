@@ -2,12 +2,16 @@
 #include <ostream>
 #include <fstream>
 #include <iomanip>
+#include <string>
 
 
 void login();
 void forgot_password();
 void registration();
 void reattemptLogin();
+bool tessPass();
+
+bool valid;
 
 using std::string;
 
@@ -33,18 +37,17 @@ int main() {
 	case 1: login();
 			break;
 
-	/* case 2: registration();
+	case 2: registration();
 			break;
 
-	case 3: forgot_password();
+	/* case 3: forgot_password();
 			break; */
 
 	case 4: std::cout << "See you soon!";
 
 	default: // If invalid option, recall main() and try again.
 		system("cls");
-		std::cout << "Invalid option, please try again";
-		std::cout << '\n';
+		std::cout << "Invalid option, please try again" << '\n';
 		main();
 		break;
 	}
@@ -110,13 +113,81 @@ void reattemptLogin() {
 void registration() {
 
 	system("cls");
-	string regUsername, regPassword, regUser, regPass;
+	valid = false;
+	int minLength = 8;
+	int maxLength = 20;
+
+	string regUsername, regPassword, regUser, regPass, passwordcheck;
+
 	std::cout << "Welcome to the registration page!" << '\n';
 	std::cout << "Please enter a username: " << '\n';
 	std::cin >> regUsername;
-	std::cout << "Enter a password that is atleast 8 characters long, with an uppercase, \n";
-	std::cout << " lowercase and special character";
+	std::cout << "Enter a password that is 8-20 characters long, with an uppercase and lowercase \n";
 	std::cin >> regPassword;
-	
 
+
+	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
+
+		for (int k = 0; k < regPassword.length(); k++)
+		{
+			if (isupper(regPassword[k]))
+			{
+				valid = true;
+
+			}
+
+		}
+	}
+
+	if (valid = true) {
+		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
+		registerUser << regUsername << " " << regPassword << std::endl;
+
+
+		system("cls");
+		int choice;
+		std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << std::endl;
+		std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
+		std::cin >> choice;
+		switch (choice)
+		{
+		case 1: login();
+			break;
+		case 2: main();
+			break;
+		default:
+			std::cout << "Invalid input, returning to main menu." << std::endl;
+			main();
+			break;
+		}
+	}
+	else if (valid = false) {
+		std::cout << "Invalid password, please attempt to create an account again." << '\n';
+		registration();
+	}
+}
+
+bool testPass(string password) {
+
+	valid = false;
+	
+	int minLength = 8;
+	int maxLength = 20;
+
+	if (password.length() >= 8 && password.length() <= 20) {
+
+		for (int k = 0; k < password.length(); k++)
+		{
+			if (isupper(password[k]))
+			{
+				return valid = true;
+
+
+
+			}
+
+		}
+	}
+
+	
 }
