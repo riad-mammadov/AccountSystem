@@ -9,6 +9,7 @@ void login();
 void forgot_password();
 void registration();
 void reattemptLogin();
+void mainmenu();
 // bool tessPass();
 
 
@@ -16,40 +17,7 @@ using std::string;
 
 int main() {
 
-	int choice; // Menu choice
-
-	// Formatting the login page
-	std::cout << "\t\t\t_______________________________________" << '\n';
-	std::cout << "\t\t\t					          " << '\n';
-	std::cout << "\t\t\t_____________  Main Menu  _____________" << '\n';
-	std::cout << "                  \n";
-	std::cout << "\t\t\t|* Select 1 for Login               \t|\n";
-	std::cout << "\t\t\t|* Select 2 to Register             \t|\n";
-	std::cout << "\t\t\t|* Select 3 if you Forgot Password  \t|\n";
-	std::cout << "\t\t\t|* Select 4 to Exit Menu.           \t| \n";
-
-	std::cin >> choice;
-
-	// Switch cases depending on users input
-	switch (choice)
-	{
-	case 1: login();
-			break;
-
-	case 2: registration();
-			break;
-
-	/* case 3: forgot_password();
-			break; */
-
-	case 4: std::cout << "See you soon!";
-
-	default: // If invalid option, recall main() and try again.
-		system("cls");
-		std::cout << "Invalid option, please try again" << '\n';
-		main();
-		break;
-	}
+	mainmenu();
 	
 }
 
@@ -80,7 +48,7 @@ void login() {
 	// if login was successful then...
 	if (successLogin == true) {
 		std::cout << username << " has successfully logged in!" << std::endl;
-		main();
+		mainmenu();
 	}
 	else {
 		// call function to reattempt login
@@ -98,7 +66,7 @@ void reattemptLogin() {
 		login();
 	else if (reattempt == "no" || reattempt == "No") {
 		system("cls");
-		main();
+		mainmenu();
 	}
 	else {
 		system("cls");
@@ -116,7 +84,7 @@ void registration() {
 	int minLength = 8;
 	int maxLength = 20;
 
-	string regUsername, regPassword, regUser, regPass, passwordcheck;
+	string regUsername, regPassword, regUser, regPass;
 
 	std::cout << "Welcome to the registration page!" << '\n';
 	std::cout << "Please enter a username: " << '\n';
@@ -125,14 +93,15 @@ void registration() {
 	std::cin >> regPassword;
 
 
-	if (regPassword.length() >= 8 || regPassword.length() <= 20) {
+	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
 
 		for (int k = 0; k < regPassword.length(); k++)
 		{
 			if (isupper(regPassword[k]))
 			{
 				valid = true;
-
+			 
+			
 			}
 
 		}
@@ -152,7 +121,7 @@ void registration() {
 		{
 		case 1: login();
 			break;
-		case 2: main();
+		case 2: mainmenu();
 			break;
 		default:
 			std::cout << "Invalid input, returning to main menu." << std::endl;
@@ -164,6 +133,44 @@ void registration() {
 		std::cout << "Invalid password, please attempt to create an account again." << '\n';
 		registration();
 	}
+}
+
+void mainmenu() {
+	int choice; // Menu choice
+
+	// Formatting the login page
+	std::cout << "\t\t\t_______________________________________" << '\n';
+	std::cout << "\t\t\t					          " << '\n';
+	std::cout << "\t\t\t_____________  Main Menu  _____________" << '\n';
+	std::cout << "                  \n";
+	std::cout << "\t\t\t|* Select 1 for Login               \t|\n";
+	std::cout << "\t\t\t|* Select 2 to Register             \t|\n";
+	std::cout << "\t\t\t|* Select 3 if you Forgot Password  \t|\n";
+	std::cout << "\t\t\t|* Select 4 to Exit Menu.           \t| \n";
+
+	std::cin >> choice;
+
+	// Switch cases depending on users input
+	switch (choice)
+	{
+	case 1: login();
+		break;
+
+	case 2: registration();
+		break;
+
+		/* case 3: forgot_password();
+				break; */
+
+	case 4: std::cout << "See you soon!";
+
+	default: // If invalid option, recall main() and try again.
+		system("cls");
+		std::cout << "Invalid option, please try again" << '\n';
+		main();
+		break;
+	}
+	return;
 }
 
 /* bool testPass(string password) {
