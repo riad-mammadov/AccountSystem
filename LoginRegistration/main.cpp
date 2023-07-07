@@ -80,7 +80,7 @@ void login() {
 	std::cout << "\t\t\t Now enter your password: " << std::endl;
 	std::cin >> password;
 
-	std::ifstream read("records.txt");    //searches for the username.txt file in userData folder(read is object name)
+	std::ifstream read("records.txt");    //searches for the record.txt file in userData folder(read is object name)
 	read >> userID >> passID;
 	
 		
@@ -163,17 +163,17 @@ void forgotPassword() {
 	std::cout << "You forgot your password? Let me help you." << std::endl;
 	std::cout << "Please provide your username: " << '\n';
 	std::cin >> username;
-	std::getline(std::cin, username);
+	
 
 	std::ifstream file;
 	file.open("records.txt");
-	if (file) {                                                   //checks if username is correct
+	if (file) {                                                  
 		std::cout << "Answer the Question correctly to recover your password.";
 		std::cout << "What was the name of your first school: ";
 		std::cin >> securityQ;
 		file >> u >> p >> sA;
 		if (sA == securityQ) {
-			std::cout << "Correct answer! Your Password is: " << '\n' << p;
+			std::cout << "Correct answer! Your Password is: " << '\n' << p; // checks if security answer is correct
 			mainmenu();
 		}
 		else {
@@ -181,7 +181,7 @@ void forgotPassword() {
 			exit(0);
 		}
 	}
-	else {
+	else { 
 		std::cout << "Username not found, try again later." << '\n';
 		exit(0);
 	}
