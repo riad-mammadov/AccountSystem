@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <cctype>
 // #include <regex>
 
 using std::string;
@@ -12,6 +13,7 @@ void forgot_password();
 void registration();
 void reattemptLogin();
 void mainmenu();
+void checkPassword(string password);
 // void testPassword(string password);
 
 
@@ -85,7 +87,6 @@ void reattemptLogin() {
 void registration() {
 
 	
-	bool valid = false;
 	int minLength = 8;
 	int maxLength = 20;
 
@@ -96,10 +97,12 @@ void registration() {
 	std::cout << "Welcome to the registration page!" << '\n';
 	std::cout << "Please enter a username: " << '\n';
 	std::cin >> regUsername;
+	std::getline(std::cin,regUsername);
 	std::cout << "Enter a password that is 8-20 characters long\n";
 	std::cin >> regPassword;
 
-	if (regPassword.length() >= 8 && regPassword.length() <= 20)  { // checks if password is 8-20 characters long and only then will it write into the file.
+	checkPassword(regPassword); // checks if password is 8-20 characters long and only then will it write into the file.
+
 		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
 		registerUser << regUsername << " " << regPassword << std::endl;
 
@@ -121,12 +124,22 @@ void registration() {
 			break;
 		}
 	}
-	else {
-		std::cout << "Invalid password, please try again" << std::endl;
-		registration();
-
-	}
 	
+	
+
+void checkPassword(string password) {
+
+	string regPassword = password;
+
+	if (regPassword.length() >= 8 && regPassword.length() <= 20) {
+		std::cout << "Valid password." << '\n';
+	}
+	else {
+		std::cout << "Invalid password, please try again" << '\n';
+		registration();
+	}
+
+
 }
 	
 
