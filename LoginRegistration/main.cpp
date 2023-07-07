@@ -10,7 +10,7 @@ using std::string;
 
 // function declarations
 void login();
-void forgot_password();
+void forgotPassword();
 void registration();
 void reattemptLogin();
 void mainmenu();
@@ -28,6 +28,43 @@ int main() {
 	return 0;
 }
 
+void mainmenu() {
+	int choice; // Menu choice
+
+	// Formatting the login page
+	std::cout << "\t\t\t_______________________________________" << '\n';
+	std::cout << "\t\t\t					          " << '\n';
+	std::cout << "\t\t\t_____________  Main Menu  _____________" << '\n';
+	std::cout << "                  \n";
+	std::cout << "\t\t\t|* Select 1 for Login               \t|\n";
+	std::cout << "\t\t\t|* Select 2 to Register             \t|\n";
+	std::cout << "\t\t\t|* Select 3 if you Forgot Password  \t|\n";
+	std::cout << "\t\t\t|* Select 4 to Exit Menu.           \t| \n";
+
+	std::cin >> choice;
+
+	// Switch cases depending on users input
+	switch (choice)
+	{
+	case 1: login();
+		break;
+
+	case 2: registration();
+		break;
+
+	case 3: forgotPassword();
+		break;
+
+	case 4: std::cout << "See you soon!" << '\n';
+
+	default: // If invalid option, recall main menu and try again.
+		system("cls");
+		std::cout << "Invalid option, please try again" << '\n';
+		mainmenu();
+		break;
+	}
+	return;
+}
 
 
 void login() {
@@ -43,16 +80,17 @@ void login() {
 	std::cout << "\t\t\t Now enter your password: " << std::endl;
 	std::cin >> password;
 
-	std::ifstream record("records.txt"); // file which stores the user details
-	while (record >> userID >> passID) {
+	std::ifstream read("records.txt");    //searches for the username.txt file in userData folder(read is object name)
+	read >> userID >> passID;
+	
 		
 		// checking the user input against the record details
 		if (userID == username && passID == password) {
 			successLogin = true; 
 			system("cls");
 		}
-	}
-	record.close();
+	
+	read.close();
 
 	// if login was successful then...
 	if (successLogin == true) {
@@ -94,32 +132,74 @@ void registration() {
 
 
 
-	string regUsername, regPassword, regUser, regPass;
+	string regUsername, regPassword, securityQ;
 
 	std::cout << "Welcome to the registration page!" << '\n';
 	std::cout << "Please enter a username: " << '\n';
 	std::cin >> regUsername;
-	std::getline(std::cin,regUsername);
 	std::cout << "Enter a password that is 8-20 characters long\n";
 	std::cin >> regPassword;
+	std::cout << "As a security measure, please answer the following question: " << '\n';
+	std::cout << "What was your first school name? " << '\n';
+	std::cin >> securityQ;
+	
 
 	checkPassword(regPassword); // checks if password is 8-20 characters long and only then will it write into the file.
 
-		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
-		registerUser << regUsername << " " << regPassword << std::endl;
+	std::ofstream file;
+	file.open("records.txt");
+	file << regUsername << std::endl << regPassword << std::endl << securityQ; //store user credentials in records
+	file.close();
 
-		successfulLogin(regUsername); // display successful registration screen
+	successfulLogin(regUsername); // display successful registration screen
 
 	}
+
+void forgotPassword() {
+
+	bool found = false;
+	string username, u, p, sA, securityQ;
+
+	std::cout << "You forgot your password? Let me help you." << std::endl;
+	std::cout << "Please provide your username: " << '\n';
+	std::cin >> username;
+	std::getline(std::cin, username);
+
+	std::ifstream file;
+	file.open("records.txt");
+	if (file) {                                                   //checks if username is correct
+		std::cout << "Answer the Question correctly to recover your password.";
+		std::cout << "What was the name of your first school: ";
+		std::cin >> securityQ;
+		file >> u >> p >> sA;
+		if (sA == securityQ) {
+			std::cout << "Correct answer! Your Password is: " << '\n' << p;
+			mainmenu();
+		}
+		else {
+			std::cout << "Wrong Answer. Try again later." << '\n';
+			exit(0);
+		}
+	}
+	else {
+		std::cout << "Username not found, try again later." << '\n';
+		exit(0);
+	}
+
+
+
+
+
+}
+
 	
 void successfulLogin(string user) {
 
 	string regUsername = user;
 
-	system("cls");
 	int choice;
 	std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << '\n' << std::endl;
-	std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
+	std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << '\n' << std::endl;
 	std::cin >> choice;
 	switch (choice)
 	{
@@ -152,43 +232,7 @@ void checkPassword(string password) {
 	
 
 
-void mainmenu() {
-	int choice; // Menu choice
 
-	// Formatting the login page
-	std::cout << "\t\t\t_______________________________________" << '\n';
-	std::cout << "\t\t\t					          " << '\n';
-	std::cout << "\t\t\t_____________  Main Menu  _____________" << '\n';
-	std::cout << "                  \n";
-	std::cout << "\t\t\t|* Select 1 for Login               \t|\n";
-	std::cout << "\t\t\t|* Select 2 to Register             \t|\n";
-	std::cout << "\t\t\t|* Select 3 if you Forgot Password  \t|\n";
-	std::cout << "\t\t\t|* Select 4 to Exit Menu.           \t| \n";
-
-	std::cin >> choice;
-
-	// Switch cases depending on users input
-	switch (choice)
-	{
-	case 1: login();
-		break;
-
-	case 2: registration();
-		break;
-
-	case 3: forgot_password();
-		break; 
-
-	case 4: std::cout << "See you soon!";
-
-	default: // If invalid option, recall main menu and try again.
-		system("cls");
-		std::cout << "Invalid option, please try again" << '\n';
-		mainmenu();
-		break;
-	}
-	return;
-}
 
 
 
