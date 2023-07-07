@@ -8,12 +8,14 @@
 
 using std::string;
 
+// function declarations
 void login();
 void forgot_password();
 void registration();
 void reattemptLogin();
 void mainmenu();
 void checkPassword(string password);
+void successfulLogin(string user);
 // void testPassword(string password);
 
 
@@ -106,26 +108,32 @@ void registration() {
 		std::ofstream registerUser("records.txt", std::ios::app); // open records.txt to write username and password inside.
 		registerUser << regUsername << " " << regPassword << std::endl;
 
+		successfulLogin(regUsername); // display successful registration screen
 
-		system("cls");
-		int choice;
-		std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << '\n' << std::endl;
-		std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
-		std::cin >> choice;
-		switch (choice)
-		{
-		case 1: login();
-			break;
-		case 2: mainmenu();
-			break;
-		default:
-			std::cout << "Invalid input, returning to main menu." << std::endl;
-			mainmenu();
-			break;
-		}
 	}
 	
-	
+void successfulLogin(string user) {
+
+	string regUsername = user;
+
+	system("cls");
+	int choice;
+	std::cout << "Welcome aboard " << regUsername << ", your registration has been successful!" << '\n' << std::endl;
+	std::cout << "Press 1 if you would like to login, and 2 if you would like to return to the main menu." << std::endl;
+	std::cin >> choice;
+	switch (choice)
+	{
+	case 1: login();
+		break;
+	case 2: mainmenu();
+		break;
+	default:
+		std::cout << "Invalid input, returning to main menu." << std::endl;
+		mainmenu();
+		break;
+	}
+
+}
 
 void checkPassword(string password) {
 
@@ -168,15 +176,15 @@ void mainmenu() {
 	case 2: registration();
 		break;
 
-		/* case 3: forgot_password();
-				break; */
+	case 3: forgot_password();
+		break; 
 
 	case 4: std::cout << "See you soon!";
 
-	default: // If invalid option, recall main() and try again.
+	default: // If invalid option, recall main menu and try again.
 		system("cls");
 		std::cout << "Invalid option, please try again" << '\n';
-		main();
+		mainmenu();
 		break;
 	}
 	return;
